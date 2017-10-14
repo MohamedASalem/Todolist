@@ -7,6 +7,8 @@ ARGV.each do|a|
 end
 flag=0
 tasks=Array.new
+temp=""
+cat=""
 class Task
   attr_accessor :name , :category, :priority
   def initialize(name, category = nil, priority = nil)
@@ -22,8 +24,22 @@ tasks =data.map { |tsk| Task.new(tsk['name'], tsk['category'],tsk['priority'])}
 $general =(tasks[tasks.size-1].priority.to_i)+1
 
 if(ARGV[0].eql?"add")
-  tasks << Task.new(ARGV[1].chomp.to_s)
-  $general += 1
+	ARGV.each_with_index do |arg,i|
+		if(i==0 or ARGV[i].include? "\#")
+  		#puts"no"
+  		if(ARGV[i].include? "\#")
+  		cat=ARGV[i]
+  		puts ARGV[i]
+  	end
+  	else
+  		temp << ARGV[i].chomp.to_s + " "
+		end
+	end
+	tasks << Task.new(temp)
+	puts tasks[$general]
+	tasks[$general-1].category=cat
+	$general += 1
+
 elsif(ARGV[0].eql?"help")
   puts "Terminal To-do List\n1-Add(Taskname) \#CategoryName(Optional) => Adds given task to todolist"
   puts"2-help => list all the commands you can use"
@@ -39,17 +55,18 @@ elsif(ARGV[0].eql?"list")
 elsif(ARGV[0].eql?"delete")
   tasks.each_with_index do |tsk,i|
     if(tsk.priority==ARGV[1]) 
-      tasks.delete_at(ARGV[1].to_i)
+      tasks.delete_at(i)
       flag=1
     end
     #x.delete_at(x.index 2)
 end
-unless(flag==1)
+if(flag!=1)
  puts "This task number is unavaliable" 
+ flag=0;
 end
 
 end
-  puts ActiveSupport::JSON.encode(tasks[0])
+  #puts ActiveSupport::JSON.encode(tasks[0])
   File.open('demo.json', 'w') { |file| file.truncate(0) }
   File.open('demo.json', 'a') { |file| file.write("[\n") }
   tasks.each_with_index do |tsk, i|

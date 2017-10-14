@@ -1,9 +1,13 @@
 [
-{"name":"Call home","category":"Home","priority":"0"},
-{"name":"ff","category":"general","priority":"2"},
-{"name":"d","category":"general","priority":"3"},
-{"name":"y","category":"general","priority":"4"},
-{"name":"mido","category":"general","priority":"5"},
-{"name":"new","category":"general","priority":"6"},
-{"name":"j","category":"general","priority":"7"}
+{"name":"Call home","category":"Home","priority":"1"},
+{"name":"Finish Task","category":"Work","priority":"2"},
+{"name":"call","category":"general","priority":"3"},
+{"name":"home","category":"general","priority":"4"},
+{"name":"callhome","category":"general","priority":"5"},
+{"name":"call mom ","category":"general","priority":"6"},
+{"name":"call you ","category":"general","priority":"7"},
+{"name":"code ","category":"add","priority":"8"},
+{"name":"code ","category":"add","priority":"9"},
+{"name":"code ","category":"","priority":"10"},
+{"name":"assigment ","category":"","priority":"11"}
 ]

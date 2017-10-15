@@ -6,6 +6,7 @@ ARGV.each do|a|
   puts "Argument : #{a}"
 end
 flag=0
+flag2=0
 tasks=Array.new
 temp=""
 cat=""
@@ -22,12 +23,17 @@ f1=File.read('demo.json')
 data=JSON.parse(f1).to_a
 tasks =data.map { |tsk| Task.new(tsk['name'], tsk['category'],tsk['priority'])}
 $general =(tasks[tasks.size-1].priority.to_i)+1
-
+def sort_tasks(task_array)
+	task_array.sort! {|a,b| a.priority <=> b.priority }
+	#myarray.sort! { |a, b|  a.attribute <=> b.attribute }
+end
+sort_tasks(tasks)
 if(ARGV[0].eql?"add")
+	sort_tasks(tasks)
 	ARGV.each_with_index do |arg,i|
-		if(i==0 or ARGV[i].include? "\#")
+		if(i==0 or ARGV[i].include? "@")
   		#puts"no"
-  		if(ARGV[i].include? "\#")
+  		if(ARGV[i].include? "@")
   		cat=ARGV[i]
   		puts ARGV[i]
   	end
@@ -37,7 +43,8 @@ if(ARGV[0].eql?"add")
 	end
 	tasks << Task.new(temp)
 	puts tasks[$general]
-	tasks[$general-1].category=cat
+	cat2=cat.sub("@", "")
+	tasks[$general-1].category=cat2
 	$general += 1
 
 elsif(ARGV[0].eql?"help")
@@ -49,9 +56,31 @@ elsif(ARGV[0].eql?"help")
   puts"7-down (Tasknumber)=>Decreases the priority of a given task number \n(If the lower priority belongs to another task , the tasks will be swapped"
   puts"8-list category(CategoryNumber/Name)=>Lists all the tasks in a given category"
 elsif(ARGV[0].eql?"list")
+	if(ARGV[1].eql?"category")
+		#puts"ana hena #{ARGV[1]}"
+		s1=ARGV[2]
+		tasks.each do |tsk|
+			if(tsk.category.eql? s1)
+				#puts"ana hena 2"
+				puts ActiveSupport::JSON.encode(tsk)
+			end
+		end
+
+	else
+	sort_tasks(tasks)
   tasks.each do |tsk|
     puts ActiveSupport::JSON.encode(tsk)
   end
+end
+elsif (ARGV[0].eql?"done")
+	number=ARGV[1]
+	puts "marked (#{number}) as done !"
+	tasks.each_with_index do |tsk,i|
+    if(tasks[i].priority==number)
+    	tasks[i].name << "(Done)"
+    end
+    end
+  	
 elsif(ARGV[0].eql?"delete")
   tasks.each_with_index do |tsk,i|
     if(tsk.priority==ARGV[1]) 
@@ -64,7 +93,39 @@ if(flag!=1)
  puts "This task number is unavaliable" 
  flag=0;
 end
+elsif (ARGV[0].eql?"up")
+	sort_tasks(tasks)
+	tasks.each_with_index do |tsk,i|
+		if(tsk.priority==ARGV[1])
+			tasks[i].priority=(tasks[i].priority.to_i - 1).to_s
+			flag2=1;
+			if(tasks[i-1].priority==tasks[i].priority)
+				tasks[i-1].priority=(tasks[i-1].priority.to_i + 1).to_s
+			end
 
+		
+	end
+	end
+	if(flag2==0)
+		puts "Number unavaliable"
+	end
+elsif (ARGV[0].eql?"down")
+	sort_tasks(tasks)
+	tasks.each_with_index do |tsk,i|
+		if(tsk.priority==ARGV[1])
+			tasks[i].priority=(tasks[i].priority.to_i + 1).to_s
+			flag2=1;
+			if(tasks[i+1].priority==tasks[i].priority)
+				tasks[i+1].priority=(tasks[i+1].priority.to_i - 1).to_s
+			end
+
+		
+	end
+	end
+	if(flag2==0)
+		puts "Number unavaliable"
+	end
+	
 end
   #puts ActiveSupport::JSON.encode(tasks[0])
   File.open('demo.json', 'w') { |file| file.truncate(0) }

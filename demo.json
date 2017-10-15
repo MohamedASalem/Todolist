@@ -1,4 +1,8 @@
 [
-{"name":"Finish Task","category":"Work","priority":"1"},
-{"name":"Call home(Done)","category":"Home","priority":"2"}
+{"name":"Call home(Done)","category":"Home","priority":"1"},
+{"name":"Finish Task","category":"Work","priority":"2"},
+{"name":"finish task ","category":"newcategory","priority":"3"},
+{"name":"finish task ","category":"general","priority":"4"},
+{"name":"finish task ","category":"new","priority":"5"},
+{"name":"task 2 ","category":"general","priority":"6"}
 ]
